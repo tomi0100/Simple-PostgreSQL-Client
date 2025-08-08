@@ -2,9 +2,9 @@
 #include <libpq-fe.h>
 #include <ncurses.h>
 #include <stdlib.h>
+#include <string.h>
 
-int main()
-{
+int main() {
 
     /* You can create your own environment variables and change their names and adapt them below */
     const char *host = getenv("PG_HOST");
@@ -12,6 +12,18 @@ int main()
     const char *database = getenv("PG_DATABASE");
     const char *user = getenv("PG_USER");
     const char *password = getenv("PG_PASSWORD");
+
+    char connection[256];
+    // Format: "host=your_host port=your_port dbname=your_database user=your_user password=your_password"
+    snprintf(connection, sizeof(connection), "host=%s port=%s dbname=%s user=%s password=%s", host, port, database, user, password);
+
+    PGconn *pgconn = PQconnectdb(connection);
+
+    if (PQstatus(pgconn) == CONNECTION_OK) {
+        printf("Connected!\n");
+    } else {
+        printf("Error! No connection established!\n");
+    }
 
     return 0;
 }

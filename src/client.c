@@ -22,9 +22,10 @@ int main() {
     if (PQstatus(pgconn) == CONNECTION_OK) {
         printf("Connected!\n");
     } else {
-        printf("Error! No connection established!\n");
-        return 1;
+        fprintf(stderr, "Error! No connection established! %s\n", PQerrorMessage(pgconn));
+        PQfinish(pgconn);
+        exit(1);
     }
-
+    
     return 0;
 }

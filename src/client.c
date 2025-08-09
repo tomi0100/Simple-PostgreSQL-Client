@@ -23,6 +23,7 @@ int main() {
         printf("Connected!\n");
     } else {
         printf("Error! No connection established!\n");
+        return 1;
     }
 
     return 0;

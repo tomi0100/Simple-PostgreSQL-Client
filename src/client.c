@@ -4,6 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void pg_exit(PGconn *pgconn) {
+    PQfinish(pgconn);
+    exit(1);
+}
+
 int main() {
 
     /* You can create your own environment variables and change their names and adapt them below */
@@ -18,6 +23,7 @@ int main() {
     snprintf(connection, sizeof(connection), "host=%s port=%s dbname=%s user=%s password=%s", host, port, database, user, password);
 
     PGconn *pgconn = PQconnectdb(connection);
+    PGresult *res;
 
     if (PQstatus(pgconn) == CONNECTION_OK) {
         printf("Connected!\n");
@@ -26,6 +32,7 @@ int main() {
         PQfinish(pgconn);
         exit(1);
     }
-    
+    res = PQexec(pgconn, "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='public'");
+
     return 0;
 }

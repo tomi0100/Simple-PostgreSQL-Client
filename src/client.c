@@ -25,13 +25,11 @@ int main() {
     PGconn *pgconn = PQconnectdb(connection);
     PGresult *res;
 
-    if (PQstatus(pgconn) == CONNECTION_OK) {
-        printf("Connected!\n");
-    } else {
+    if (PQstatus(pgconn) != CONNECTION_OK) {
         fprintf(stderr, "Error! No connection established! %s\n", PQerrorMessage(pgconn));
-        PQfinish(pgconn);
-        exit(1);
+        pg_exit(pgconn);
     }
+    
     res = PQexec(pgconn, "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='public'");
 
     return 0;
